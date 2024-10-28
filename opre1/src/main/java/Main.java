@@ -1,8 +1,3 @@
-/*
- * Opre HF1 kétszintű ütemező kódvázlat
- * v20241018
- */
-
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.IOException;
@@ -42,7 +37,7 @@ class Main {
         ArrayList<Task> readinessHistory = new ArrayList<>();
 
         while (current != null || waiting.peek() != null) {
-            while (waiting.peek() != null && waiting.peek().canStartAt >= currentTime) {
+            while (waiting.peek() != null && waiting.peek().canStartAt <= currentTime) {
                 Task task = waiting.remove();
                 if (task.priority == 0)
                     lowPrioReady.add(task);
@@ -67,6 +62,7 @@ class Main {
                 current.remainingWorkLength -= currentRanFor;
                 current.canStartAt = currentTime;
                 if (current.remainingWorkLength > 0) {
+                    //noinspection ConstantValue
                     assert current.priority == 0;
                     lowPrioReady.add(current);
                 }

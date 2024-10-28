@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -e
+# set -e
 
 cp src/main/java/Main.java .
 
