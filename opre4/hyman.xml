@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+bool blocked0 = true;
+bool blocked1 = true;
+int turn = 0;</declaration>
+	<template>
+		<name>P2</name>
+		<location id="id0" x="-229" y="-136">
+			<name x="-306" y="-170">other_things</name>
+		</location>
+		<location id="id1" x="26" y="-170">
+		</location>
+		<location id="id2" x="127" y="34">
+		</location>
+		<location id="id3" x="-280" y="51">
+			<name x="-390" y="68">critical_section</name>
+		</location>
+		<location id="id4" x="221" y="-161">
+		</location>
+		<init ref="id0"/>
+		<transition id="id5">
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="34" y="-93">turn = 1</label>
+		</transition>
+		<transition id="id6">
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<label kind="guard" x="145" y="-97">!blocked0</label>
+		</transition>
+		<transition id="id7">
+			<source ref="id4"/>
+			<target ref="id4"/>
+			<label kind="guard" x="263" y="-187">blocked0</label>
+			<nail x="382" y="-153"/>
+			<nail x="382" y="-153"/>
+			<nail x="348" y="-255"/>
+		</transition>
+		<transition id="id8">
+			<source ref="id1"/>
+			<target ref="id3"/>
+			<label kind="guard" x="-153" y="-51">turn == 1</label>
+		</transition>
+		<transition id="id9">
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="guard" x="76" y="-187">turn != 1</label>
+		</transition>
+		<transition id="id10">
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-382" y="-68">blocked1 = false</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-161" y="-178">blocked1 = true</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">P1</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id12" x="-331" y="-416">
+			<name x="-408" y="-450">other_things</name>
+		</location>
+		<location id="id13" x="-76" y="-450">
+		</location>
+		<location id="id14" x="25" y="-246">
+		</location>
+		<location id="id15" x="-382" y="-229">
+			<name x="-492" y="-212">critical_section</name>
+		</location>
+		<location id="id16" x="119" y="-441">
+		</location>
+		<init ref="id12"/>
+		<transition id="id17">
+			<source ref="id14"/>
+			<target ref="id13"/>
+			<label kind="assignment" x="-68" y="-373">turn = 0</label>
+		</transition>
+		<transition id="id18">
+			<source ref="id16"/>
+			<target ref="id14"/>
+			<label kind="guard" x="43" y="-377">!blocked1</label>
+		</transition>
+		<transition id="id19">
+			<source ref="id16"/>
+			<target ref="id16"/>
+			<label kind="guard" x="161" y="-467">blocked1</label>
+			<nail x="280" y="-433"/>
+			<nail x="280" y="-433"/>
+			<nail x="246" y="-535"/>
+		</transition>
+		<transition id="id20">
+			<source ref="id13"/>
+			<target ref="id15"/>
+			<label kind="guard" x="-255" y="-331">turn == 0</label>
+		</transition>
+		<transition id="id21">
+			<source ref="id13"/>
+			<target ref="id16"/>
+			<label kind="guard" x="-26" y="-467">turn != 0</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id15"/>
+			<target ref="id12"/>
+			<label kind="assignment" x="-484" y="-348">blocked0 = false</label>
+		</transition>
+		<transition id="id23">
+			<source ref="id12"/>
+			<target ref="id13"/>
+			<label kind="assignment" x="-263" y="-458">blocked0 = true</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+p1 = P1();
+p2 = P2();
+// List one or more processes to be composed into a system.
+system p1, p2;</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:08:47 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>A[] not (p1.critical_section and p2.critical_section)</formula>
+			<comment/>
+			<option key="--diagnostic" value="1"/>
+			<result outcome="failure" type="quality" timestamp="2024-11-20 11:08:49 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p1.critical_section</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:08:49 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p2.critical_section</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:08:49 +0100">
+			</result>
+		</query>
+	</queries>
+</nta>

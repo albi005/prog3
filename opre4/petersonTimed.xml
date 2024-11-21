@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+bool blocked0 = true;
+bool blocked1 = true;
+int turn = 0;
+clock lastRun0 = 0;
+clock lastRun1 = 0;</declaration>
+	<template>
+		<name>P2</name>
+		<location id="id0" x="246" y="8">
+			<name x="238" y="33">crit</name>
+			<label kind="testcodeEnter">lastRun1 = 0</label>
+			<urgent/>
+		</location>
+		<location id="id1" x="-17" y="1">
+			<name x="-76" y="-8">other</name>
+			<urgent/>
+		</location>
+		<location id="id2" x="128" y="-110">
+			<urgent/>
+		</location>
+		<location id="id3" x="298" y="-110">
+			<urgent/>
+		</location>
+		<location id="id4" x="451" y="-110">
+			<urgent/>
+		</location>
+		<location id="id5" x="-17" y="-110">
+			<urgent/>
+		</location>
+		<init ref="id1"/>
+		<transition id="id6">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-42" y="42">blocked1 = false</label>
+		</transition>
+		<transition id="id7">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="145" y="-76">!blocked0</label>
+		</transition>
+		<transition id="id8">
+			<source ref="id3"/>
+			<target ref="id0"/>
+			<label kind="guard" x="272" y="-67">turn == 1</label>
+		</transition>
+		<transition id="id9">
+			<source ref="id4"/>
+			<target ref="id2"/>
+			<nail x="306" y="-246"/>
+		</transition>
+		<transition id="id10">
+			<source ref="id3"/>
+			<target ref="id4"/>
+			<label kind="guard" x="315" y="-127">turn != 1</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id2"/>
+			<target ref="id3"/>
+			<label kind="guard" x="196" y="-127">blocked0</label>
+		</transition>
+		<transition id="id12">
+			<source ref="id5"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="1" y="-110">turn = 0</label>
+		</transition>
+		<transition id="id13">
+			<source ref="id1"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-177" y="-114">blocked1 = true</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">P1</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id14" x="8" y="-110">
+			<name x="-51" y="-119">other</name>
+		</location>
+		<location id="id15" x="8" y="-221">
+		</location>
+		<location id="id16" x="153" y="-221">
+		</location>
+		<location id="id17" x="323" y="-221">
+		</location>
+		<location id="id18" x="476" y="-221">
+		</location>
+		<location id="id19" x="263" y="-110">
+			<name x="255" y="-85">crit</name>
+			<label kind="testcodeEnter">lastRun0 = 0</label>
+			<urgent/>
+		</location>
+		<init ref="id14"/>
+		<transition id="id20">
+			<source ref="id19"/>
+			<target ref="id14"/>
+			<label kind="assignment" x="68" y="-110">blocked0 = false</label>
+		</transition>
+		<transition id="id21">
+			<source ref="id16"/>
+			<target ref="id19"/>
+			<label kind="guard" x="170" y="-187">!blocked1</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id17"/>
+			<target ref="id19"/>
+			<label kind="guard" x="297" y="-178">turn == 0</label>
+		</transition>
+		<transition id="id23">
+			<source ref="id18"/>
+			<target ref="id16"/>
+			<nail x="331" y="-357"/>
+		</transition>
+		<transition id="id24">
+			<source ref="id17"/>
+			<target ref="id18"/>
+			<label kind="guard" x="340" y="-238">turn != 0</label>
+		</transition>
+		<transition id="id25">
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="guard" x="212" y="-238">blocked1</label>
+		</transition>
+		<transition id="id26">
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="assignment" x="26" y="-221">turn = 1</label>
+		</transition>
+		<transition id="id27">
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-152" y="-225">blocked0 = true</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+p1 = P1();
+p2 = P2();
+// List one or more processes to be composed into a system.
+system p1, p2;</system>
+	<queries>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:33 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>A[] not (p1.crit and p2.crit)</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:34 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p1.crit</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:34 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p2.crit</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:34 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>A[] p1.crit imply (blocked0 and (!blocked1 or (turn == 0)))</formula>
+			<comment/>
+			<option key="--diagnostic" value="1"/>
+			<result outcome="failure" type="quality" timestamp="2024-11-20 11:21:35 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A[] lastRun0 &lt; 100</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:35 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>A[] lastRun1 &lt; 100</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:35 +0100">
+			</result>
+		</query>
+	</queries>
+</nta>
