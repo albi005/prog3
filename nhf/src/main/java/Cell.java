@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.function.Consumer;
 
 public class Cell extends JComponent {
     public static final Color Light = new Color(0xFFCE9E);
@@ -10,6 +11,7 @@ public class Cell extends JComponent {
     private final int col;
     private boolean isHovered = false;
     private boolean isPressed = false;
+    private Consumer<Cell> onClick;
 
     private Figure figure;
 
@@ -42,6 +44,13 @@ public class Cell extends JComponent {
             public void mouseReleased(MouseEvent e) {
                 isPressed = false;
                 repaint();
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (onClick != null) {
+                    onClick.accept(Cell.this);
+                }
             }
         });
     }
@@ -90,5 +99,10 @@ public class Cell extends JComponent {
 
     public void setFigure(Figure figure) {
         this.figure = figure;
+        repaint();
+    }
+
+    public void setOnClick(Consumer<Cell> onClick) {
+        this.onClick = onClick;
     }
 }

@@ -5,13 +5,29 @@ public class Board extends JPanel {
     private final Cell[][] cells = new Cell[8][8];
     public Board() {
         setLayout(new GridLayout(8, 8));
+
         for (int row = 0; row < 8; row++) {
             for (int col = 0; col < 8; col++) {
                 Cell cell = new Cell(row, col);
+                cell.setOnClick(c -> {
+                    System.out.println("Cell clicked: " + c.getRow() + ", " + c.getCol());
+                });
                 cells[row][col] = cell;
                 add(cell);
             }
         }
+    }
+
+    public void clear() {
+        for (int row = 0; row < 8; row++) {
+            for (int col = 0; col < 8; col++) {
+                cells[row][col].setFigure(null);
+            }
+        }
+    }
+
+    public void reset() {
+        clear();
 
         for (int col = 0; col < 8; col++) {
             cells[1][col].setFigure(Figure.createPawn(Color.BLACK));
