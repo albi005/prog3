@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+int turn = 0;
+bool flag[2] = {false, false};</declaration>
+	<template>
+		<name>P1</name>
+		<declaration>// Place local declarations here.
+clock cl;</declaration>
+		<location id="id0" x="-158" y="-170">
+			<urgent/>
+		</location>
+		<location id="id1" x="231" y="-69">
+			<name x="250" y="-80">crit</name>
+			<urgent/>
+		</location>
+		<location id="id2" x="266" y="-230">
+			<urgent/>
+		</location>
+		<location id="id3" x="138" y="-238">
+			<urgent/>
+		</location>
+		<location id="id4" x="396" y="-228">
+			<urgent/>
+		</location>
+		<location id="id5" x="-9" y="-242">
+			<urgent/>
+		</location>
+		<init ref="id0"/>
+		<transition id="id6">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="-85" y="-117">flag[1] = false</label>
+		</transition>
+		<transition id="id7">
+			<source ref="id2"/>
+			<target ref="id1"/>
+			<label kind="guard" x="268" y="-182">turn != 0</label>
+		</transition>
+		<transition id="id8">
+			<source ref="id3"/>
+			<target ref="id1"/>
+			<label kind="guard" x="153" y="-182">!flag[0]</label>
+			<nail x="149" y="-162"/>
+		</transition>
+		<transition id="id9">
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<nail x="274" y="-347"/>
+		</transition>
+		<transition id="id10">
+			<source ref="id2"/>
+			<target ref="id4"/>
+			<label kind="guard" x="290" y="-230">turn == 0</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="guard" x="174" y="-233">flag[0]</label>
+		</transition>
+		<transition id="id12">
+			<source ref="id5"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="21" y="-241">turn = 0</label>
+		</transition>
+		<transition id="id13">
+			<source ref="id0"/>
+			<target ref="id5"/>
+			<label kind="assignment" x="-176" y="-233">flag[1] = true</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">P0</name>
+		<declaration>// Place local declarations here.
+clock cl;</declaration>
+		<location id="id14" x="231" y="-69">
+			<name x="250" y="-80">crit</name>
+			<urgent/>
+		</location>
+		<location id="id15" x="-158" y="-170">
+			<urgent/>
+		</location>
+		<location id="id16" x="266" y="-230">
+			<urgent/>
+		</location>
+		<location id="id17" x="138" y="-238">
+			<urgent/>
+		</location>
+		<location id="id18" x="396" y="-228">
+			<urgent/>
+		</location>
+		<location id="id19" x="-9" y="-242">
+			<urgent/>
+		</location>
+		<init ref="id15"/>
+		<transition id="id20">
+			<source ref="id14"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-85" y="-117">flag[0] = false</label>
+		</transition>
+		<transition id="id21">
+			<source ref="id16"/>
+			<target ref="id14"/>
+			<label kind="guard" x="268" y="-182">turn != 1</label>
+		</transition>
+		<transition id="id22">
+			<source ref="id17"/>
+			<target ref="id14"/>
+			<label kind="guard" x="153" y="-182">!flag[1]</label>
+			<nail x="149" y="-162"/>
+		</transition>
+		<transition id="id23">
+			<source ref="id18"/>
+			<target ref="id17"/>
+			<nail x="274" y="-347"/>
+		</transition>
+		<transition id="id24">
+			<source ref="id16"/>
+			<target ref="id18"/>
+			<label kind="guard" x="290" y="-230">turn == 1</label>
+		</transition>
+		<transition id="id25">
+			<source ref="id17"/>
+			<target ref="id16"/>
+			<label kind="guard" x="174" y="-233">flag[1]</label>
+		</transition>
+		<transition id="id26">
+			<source ref="id19"/>
+			<target ref="id17"/>
+			<label kind="assignment" x="21" y="-241">turn = 1</label>
+		</transition>
+		<transition id="id27">
+			<source ref="id15"/>
+			<target ref="id19"/>
+			<label kind="assignment" x="-176" y="-233">flag[0] = true</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+p0 = P0();
+p1 = P1();
+// List one or more processes to be composed into a system.
+system p0, p1;
+</system>
+	<queries>
+		<option key="--diagnostic" value="1"/>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment>holtpontmentesség</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:23:07 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A[] not (p0.crit and p1.crit)</formula>
+			<comment>kölcsönös kizárást biztosítja a protokoll</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:23:07 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:36:13 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:32:05 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 11:27:49 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 11:23:08 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+	</queries>
+</nta>

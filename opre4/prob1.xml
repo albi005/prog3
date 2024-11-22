@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+int turn = 0;</declaration>
+	<template>
+		<name>P1</name>
+		<location id="id0" x="36" y="78">
+			<urgent/>
+		</location>
+		<location id="id1" x="232" y="10">
+		</location>
+		<location id="id2" x="215" y="205">
+			<name x="198" y="222">crit</name>
+		</location>
+		<init ref="id0"/>
+		<transition id="id3">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="assignment" x="12" y="201">turn = 0</label>
+			<nail x="53" y="197"/>
+		</transition>
+		<transition id="id4">
+			<source ref="id1"/>
+			<target ref="id0"/>
+			<nail x="96" y="-7"/>
+		</transition>
+		<transition id="id5">
+			<source ref="id0"/>
+			<target ref="id2"/>
+			<label kind="guard" x="130" y="129">turn == 1</label>
+		</transition>
+		<transition id="id6">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="guard" x="121" y="44">turn != 1</label>
+		</transition>
+	</template>
+	<template>
+		<name x="0" y="0">P0</name>
+		<declaration>// Place local declarations here.
+</declaration>
+		<location id="id7" x="-408" y="-204">
+			<committed/>
+		</location>
+		<location id="id8" x="-204" y="-280">
+		</location>
+		<location id="id9" x="-229" y="-76">
+			<name x="-255" y="-76">crit</name>
+		</location>
+		<init ref="id7"/>
+		<transition id="id10">
+			<source ref="id9"/>
+			<target ref="id7"/>
+			<label kind="assignment" x="-433" y="-76">turn = 1</label>
+			<nail x="-382" y="-102"/>
+		</transition>
+		<transition id="id11">
+			<source ref="id8"/>
+			<target ref="id7"/>
+			<nail x="-357" y="-306"/>
+		</transition>
+		<transition id="id12">
+			<source ref="id7"/>
+			<target ref="id9"/>
+			<label kind="guard" x="-306" y="-153">turn == 0</label>
+		</transition>
+		<transition id="id13">
+			<source ref="id7"/>
+			<target ref="id8"/>
+			<label kind="guard" x="-323" y="-238">turn != 0</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+p0 = P0();
+p1 = P1();
+// List one or more processes to be composed into a system.
+system p0, p1;
+</system>
+	<queries>
+		<option key="--diagnostic" value="1"/>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment>holtpontmentesség</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:39:47 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A[] not (p0.crit and p1.crit)</formula>
+			<comment>kölcsönös kizárást biztosítja a protokoll</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:39:47 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:39:48 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:39:48 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:39:49 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 11:39:49 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+	</queries>
+</nta>

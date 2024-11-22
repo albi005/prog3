@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE nta PUBLIC '-//Uppaal Team//DTD Flat System 1.6//EN' 'http://www.it.uu.se/research/group/darts/uppaal/flat-1_6.dtd'>
+<nta>
+	<declaration>// Place global declarations here.
+bool flag[2] = {false, false};</declaration>
+	<template>
+		<name>P1</name>
+		<declaration>// Place local declarations here.
+clock cl;</declaration>
+		<location id="id0" x="41" y="-224">
+			<label kind="invariant" x="-23" y="-258">cl &lt;= 10</label>
+		</location>
+		<location id="id1" x="40" y="66">
+			<urgent/>
+		</location>
+		<location id="id2" x="150" y="-186">
+			<label kind="invariant" x="167" y="-198">cl &lt;= 7</label>
+		</location>
+		<location id="id3" x="178" y="-80">
+			<urgent/>
+		</location>
+		<location id="id4" x="179" y="19">
+			<urgent/>
+		</location>
+		<location id="id5" x="102" y="160">
+			<name x="123" y="153">crit</name>
+			<urgent/>
+		</location>
+		<location id="id6" x="-85" y="119">
+			<urgent/>
+		</location>
+		<init ref="id6"/>
+		<transition id="id7">
+			<source ref="id0"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-79" y="-93">flag[1] = true</label>
+		</transition>
+		<transition id="id8">
+			<source ref="id2"/>
+			<target ref="id0"/>
+			<label kind="guard" x="90" y="-226">cl &gt; 5</label>
+		</transition>
+		<transition id="id9">
+			<source ref="id3"/>
+			<target ref="id2"/>
+			<label kind="assignment" x="168" y="-145">cl = 0</label>
+		</transition>
+		<transition id="id10">
+			<source ref="id4"/>
+			<target ref="id3"/>
+			<label kind="assignment" x="183" y="-37">flag[1] = false</label>
+		</transition>
+		<transition id="id11">
+			<source ref="id6"/>
+			<target ref="id1"/>
+			<label kind="assignment" x="-122" y="61">flag[1] = true</label>
+		</transition>
+		<transition id="id12">
+			<source ref="id5"/>
+			<target ref="id6"/>
+			<label kind="assignment" x="-73" y="150">flag[1] = false</label>
+		</transition>
+		<transition id="id13">
+			<source ref="id1"/>
+			<target ref="id5"/>
+			<label kind="guard" x="68" y="83">!flag[0]</label>
+		</transition>
+		<transition id="id14">
+			<source ref="id1"/>
+			<target ref="id4"/>
+			<label kind="guard" x="86" y="47">flag[0]</label>
+		</transition>
+	</template>
+	<template>
+		<name x="5" y="5">P0</name>
+		<declaration>// Place local declarations here.
+clock cl;</declaration>
+		<location id="id15" x="40" y="66">
+			<urgent/>
+		</location>
+		<location id="id16" x="102" y="160">
+			<name x="123" y="153">crit</name>
+			<urgent/>
+		</location>
+		<location id="id17" x="-85" y="119">
+			<urgent/>
+		</location>
+		<location id="id18" x="179" y="19">
+			<urgent/>
+		</location>
+		<location id="id19" x="178" y="-80">
+			<urgent/>
+		</location>
+		<location id="id20" x="150" y="-186">
+			<label kind="invariant" x="167" y="-198">cl &lt;= 7</label>
+		</location>
+		<location id="id21" x="41" y="-224">
+			<label kind="invariant" x="-23" y="-258">cl &lt;= 10</label>
+		</location>
+		<init ref="id17"/>
+		<transition id="id22">
+			<source ref="id21"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-79" y="-93">flag[0] = true</label>
+		</transition>
+		<transition id="id23">
+			<source ref="id20"/>
+			<target ref="id21"/>
+			<label kind="guard" x="90" y="-226">cl &gt; 5</label>
+		</transition>
+		<transition id="id24">
+			<source ref="id19"/>
+			<target ref="id20"/>
+			<label kind="assignment" x="168" y="-145">cl = 0</label>
+		</transition>
+		<transition id="id25">
+			<source ref="id18"/>
+			<target ref="id19"/>
+			<label kind="assignment" x="183" y="-37">flag[0] = false</label>
+		</transition>
+		<transition id="id26">
+			<source ref="id17"/>
+			<target ref="id15"/>
+			<label kind="assignment" x="-122" y="61">flag[0] = true</label>
+		</transition>
+		<transition id="id27">
+			<source ref="id16"/>
+			<target ref="id17"/>
+			<label kind="assignment" x="-73" y="150">flag[0] = false</label>
+		</transition>
+		<transition id="id28">
+			<source ref="id15"/>
+			<target ref="id16"/>
+			<label kind="guard" x="68" y="83">!flag[1]</label>
+		</transition>
+		<transition id="id29">
+			<source ref="id15"/>
+			<target ref="id18"/>
+			<label kind="guard" x="86" y="47">flag[1]</label>
+		</transition>
+	</template>
+	<system>// Place template instantiations here.
+p0 = P0();
+p1 = P1();
+// List one or more processes to be composed into a system.
+system p0, p1;
+</system>
+	<queries>
+		<option key="--diagnostic" value="1"/>
+		<query>
+			<formula>A[] not deadlock</formula>
+			<comment>holtpontmentesség</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:41:39 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A[] not (p0.crit and p1.crit)</formula>
+			<comment>kölcsönös kizárást biztosítja a protokoll</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:41:39 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:41:39 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 11:41:40 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 11:41:40 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 11:41:40 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+	</queries>
+</nta>

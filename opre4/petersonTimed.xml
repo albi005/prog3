@@ -78,14 +78,19 @@ clock lastRun1 = 0;</declaration>
 </declaration>
 		<location id="id14" x="8" y="-110">
 			<name x="-51" y="-119">other</name>
+			<urgent/>
 		</location>
 		<location id="id15" x="8" y="-221">
+			<urgent/>
 		</location>
 		<location id="id16" x="153" y="-221">
+			<urgent/>
 		</location>
 		<location id="id17" x="323" y="-221">
+			<urgent/>
 		</location>
 		<location id="id18" x="476" y="-221">
+			<urgent/>
 		</location>
 		<location id="id19" x="263" y="-110">
 			<name x="255" y="-85">crit</name>
@@ -143,45 +148,47 @@ system p1, p2;</system>
 		<query>
 			<formula>A[] not deadlock</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:33 +0100">
+			<result outcome="success" type="quality" timestamp="2024-11-21 23:22:23 +0100">
 			</result>
 		</query>
 		<query>
 			<formula>A[] not (p1.crit and p2.crit)</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:34 +0100">
+			<result outcome="success" type="quality" timestamp="2024-11-21 23:22:23 +0100">
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt; p1.crit</formula>
+			<formula>A&lt;&gt; p1.crit</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:34 +0100">
+			<option key="--diagnostic" value="1"/>
+			<result outcome="failure" type="quality" timestamp="2024-11-21 23:22:24 +0100">
+				<option key="--diagnostic" value="1"/>
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt; p2.crit</formula>
+			<formula>A&lt;&gt; p2.crit</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:34 +0100">
+			<result outcome="failure" type="quality" timestamp="2024-11-21 23:22:24 +0100">
 			</result>
 		</query>
 		<query>
 			<formula>A[] p1.crit imply (blocked0 and (!blocked1 or (turn == 0)))</formula>
 			<comment/>
 			<option key="--diagnostic" value="1"/>
-			<result outcome="failure" type="quality" timestamp="2024-11-20 11:21:35 +0100">
+			<result outcome="failure" type="quality" timestamp="2024-11-21 23:22:26 +0100">
 				<option key="--diagnostic" value="1"/>
 			</result>
 		</query>
 		<query>
 			<formula>A[] lastRun0 &lt; 100</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:35 +0100">
+			<result outcome="success" type="quality" timestamp="2024-11-21 23:22:26 +0100">
 			</result>
 		</query>
 		<query>
 			<formula>A[] lastRun1 &lt; 100</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:21:35 +0100">
+			<result outcome="success" type="quality" timestamp="2024-11-21 23:22:26 +0100">
 			</result>
 		</query>
 	</queries>
