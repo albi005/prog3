@@ -2,7 +2,9 @@ package chess;
 
 import chess.figures.Figure;
 
+import java.util.Collection;
 import java.util.Iterator;
+import java.util.stream.Stream;
 
 public class Cells implements Iterable<Cell> {
     private final Cell[][] cells = new Cell[8][8];
@@ -54,5 +56,4 @@ public class Cells implements Iterable<Cell> {
             }
         };
     }
-
 }

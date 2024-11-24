@@ -32,5 +32,22 @@ public class InfoPanel extends JPanel {
             this.board.setState(empty);
             empty.startGame(this.board);
         });
+
+        board.setOnStateChanged(state -> {
+            if (state instanceof BoardState.Empty empty) {
+                button.setVisible(false);
+            }
+            if (state instanceof BoardState.Selecting selecting) {
+                button.setVisible(true);
+                button.setText("Új játék");
+            }
+            if (state instanceof BoardState.Moving moving) {
+            }
+            if (state instanceof BoardState.Checked checked) {
+            }
+            if (state instanceof BoardState.Checkmated checkmated) {
+
+            }
+        });
     }
 }

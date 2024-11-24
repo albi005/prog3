@@ -90,10 +90,10 @@ public abstract class BoardState {
 
     // select another cell or move with the selected cell
     public static class Moving extends BoardState {
-        private final Cell selectedCell;
-        private final Figure selectedFigure;
-        private final HashMap<Cell, Figure.Move> getMove = new HashMap<>();
-        private Cells cells;
+        protected final Cell selectedCell;
+        protected final Figure selectedFigure;
+        protected final HashMap<Cell, Figure.Move> getMove = new HashMap<>();
+        protected Cells cells;
 
         public Moving(Cell selectedCell) {
             assert selectedCell.getFigure() != null;
@@ -136,10 +136,16 @@ public abstract class BoardState {
 
             removeEnPassant(nextColor);
 
+            King checkedKing = getChecked(cells, nextColor);
+            if (checkedKing != null) {
+                board.setState(new Checked(checkedKing));
+                return;
+            }
+
             board.setState(new Selecting(nextColor));
         }
 
-        private CellState getState(Cell cell, Cells cells) {
+        protected CellState getState(Cell cell, Cells cells) {
             if (cell == selectedCell) return CellState.DISABLED;
 
             Figure figure = cell.getFigure();
@@ -158,6 +164,64 @@ public abstract class BoardState {
                 if (figure instanceof Pawn.EnPassant enPassant && enPassant.getColor() == color)
                     cell.setFigure(null);
             }
+        }
+
+        private King getChecked(Cells cells, Color color) {
+            King king = null;
+            for (Cell cell : cells) {
+                Figure figure = cell.getFigure();
+                if (figure instanceof King kingFigure && figure.getColor() == color) {
+                    king = kingFigure;
+                    break;
+                }
+            }
+
+            assert king != null;
+            return king.isChecked(cells)
+                    ? king
+                    : null;
+        }
+    }
+
+    public static class Checked extends Moving {
+        public Checked(King checkedKing) {
+            super(checkedKing.getCell());
+        }
+
+        @Override
+        public void apply(Board board, Cells cells) {
+            super.apply(board, cells);
+
+            if (getMove.isEmpty()) {
+                board.setState(new Checkmated(selectedFigure.getColor()));
+            }
+        }
+
+        @Override
+        protected CellState getState(Cell cell, Cells cells) {
+            if (getMove.containsKey(cell))
+                return CellState.SELECTABLE;
+
+            return CellState.DISABLED;
+        }
+    }
+
+    public static class Checkmated extends BoardState {
+        private final Color color;
+
+        public Checkmated(Color color) {
+            this.color = color;
+        }
+
+        @Override
+        public void apply(Board board, Cells cells) {
+            for (Cell cell : cells) {
+                cell.setState(CellState.NEUTRAL);
+            }
+        }
+
+        public Color getColor() {
+            return color;
         }
     }
 }

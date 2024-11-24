@@ -2,10 +2,12 @@ package chess;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class Board extends JPanel {
     private final Cells cells = new Cells();
     private BoardState state;
+    private Consumer<BoardState> onStateChanged;
 
     public Board() {
         setLayout(new GridLayout(8, 8));
@@ -19,9 +21,14 @@ public class Board extends JPanel {
     public void setState(BoardState state) {
         this.state = state;
         state.apply(this, cells);
+        if (onStateChanged != null) onStateChanged.accept(state);
     }
 
     public BoardState getState() {
         return state;
+    }
+
+    public void setOnStateChanged(Consumer<BoardState> onStateChanged) {
+        this.onStateChanged = onStateChanged;
     }
 }

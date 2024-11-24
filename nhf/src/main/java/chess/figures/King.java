@@ -78,4 +78,22 @@ public class King extends Figure {
 
         return result;
     }
+
+    public boolean isChecked(Cells cells) {
+        for (Cell cell : cells) {
+            Figure figure = cell.getFigure();
+            if (figure == null)
+                continue;
+            if (figure.getColor() == color)
+                continue;
+            for (Move move : figure.getMoves(cells)) {
+                if (move == null || move.getEnd() == null)
+                    continue;
+                Cell end = move.getEnd();
+                if (end == this.cell)
+                    return true;
+            }
+        }
+        return false;
+    }
 }
