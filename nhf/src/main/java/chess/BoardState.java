@@ -3,6 +3,7 @@ package chess;
 import chess.figures.*;
 
 import java.awt.*;
+import java.util.HashMap;
 
 public abstract class BoardState {
     public abstract void apply(Board board, Cells cells);
@@ -10,7 +11,7 @@ public abstract class BoardState {
     public void handleCellSelected(Board board, Cell cell) {
     }
 
-    public static class Disabled extends BoardState {
+    public static class Empty extends BoardState {
         @Override
         public void apply(Board board, Cells cells) {
             for (Cell cell : cells) {
@@ -24,7 +25,7 @@ public abstract class BoardState {
         }
     }
 
-    public static class Starting extends BoardState {
+    private static class Starting extends BoardState {
         private Starting() {
         }
 
@@ -90,27 +91,73 @@ public abstract class BoardState {
     // select another cell or move with the selected cell
     public static class Moving extends BoardState {
         private final Cell selectedCell;
+        private final Figure selectedFigure;
+        private final HashMap<Cell, Figure.Move> getMove = new HashMap<>();
+        private Cells cells;
 
         public Moving(Cell selectedCell) {
+            assert selectedCell.getFigure() != null;
             this.selectedCell = selectedCell;
+            this.selectedFigure = selectedCell.getFigure();
         }
 
         @Override
         public void apply(Board board, Cells cells) {
-            for (Cell cell : cells) {
-                cell.setState(getState(cell));
+            Figure figure = selectedCell.getFigure();
+            var moves = figure.getMoves(cells);
+            for (Figure.Move move : moves) {
+                if (move == null) continue;
+                Cell end = move.getEnd();
+                if (end == null)
+                    continue;
+                getMove.put(end, move);
             }
+
+            for (Cell cell : cells) {
+                cell.setState(getState(cell, cells));
+            }
+
+            this.cells = cells;
         }
 
         @Override
         public void handleCellSelected(Board board, Cell cell) {
+            Figure figure = cell.getFigure();
+            if (figure != null && figure.getColor() == selectedFigure.getColor()) {
+                board.setState(new Moving(cell));
+                return;
+            }
 
+            Figure.Move move = getMove.get(cell);
+            move.execute(cells);
+            Color nextColor = selectedFigure.getColor() == Color.WHITE
+                    ? Color.BLACK
+                    : Color.WHITE;
+
+            removeEnPassant(nextColor);
+
+            board.setState(new Selecting(nextColor));
         }
 
-        private CellState getState(Cell cell) {
-            if (cell == selectedCell) return CellState.NEUTRAL;
+        private CellState getState(Cell cell, Cells cells) {
+            if (cell == selectedCell) return CellState.DISABLED;
+
+            Figure figure = cell.getFigure();
+            if (figure != null && figure.getColor() == selectedFigure.getColor())
+                return CellState.SELECTABLE;
+
+            if (getMove.containsKey(cell))
+                return CellState.SELECTABLE;
 
             return CellState.DISABLED;
+        }
+
+        private void removeEnPassant(Color color) {
+            for (Cell cell : cells) {
+                Figure figure = cell.getFigure();
+                if (figure instanceof Pawn.EnPassant enPassant && enPassant.getColor() == color)
+                    cell.setFigure(null);
+            }
         }
     }
 }

@@ -22,8 +22,8 @@ public class Pawn extends Figure {
 
     @Override
     public ArrayList<Move> getMoves(Cells cells) {
-        Forward forwardOne = new Forward(cell, cells);
-        Move forwardTwo = forwardOne.next(cells);
+        ForwardOne forwardOne = new ForwardOne(cells);
+        ForwardTwo forwardTwo = forwardOne.next(cells);
         var result = new ArrayList<Move>();
         result.add(forwardOne);
         result.add(forwardTwo);
@@ -51,19 +51,36 @@ public class Pawn extends Figure {
         return cells.get(row, col);
     }
 
-    private class Forward extends Move {
-        private Forward(Cell start, Cells cells) {
-            super(forward(start, cells));
+    private class ForwardOne extends Move {
+        private ForwardOne(Cells cells) {
+            super(forward(cell, cells));
             if (end != null && end.getFigure() != null)
                 end = null;
         }
 
-        public Move next(Cells cells) {
+        public ForwardTwo next(Cells cells) {
             if (end == null)
                 return null;
             if (cell.getRow() != getStartRow())
                 return null;
-            return new Forward(end, cells);
+            return new ForwardTwo(end, cells);
+        }
+    }
+
+    private class ForwardTwo extends Move {
+        private final Cell forwardOne;
+
+        private ForwardTwo(Cell forwardOne, Cells cells) {
+            super(forward(forwardOne, cells));
+            if (end != null && end.getFigure() != null)
+                end = null;
+            this.forwardOne = forwardOne;
+        }
+
+        @Override
+        public void execute(Cells cells) {
+            super.execute(cells);
+            forwardOne.setFigure(new EnPassant());
         }
     }
 
@@ -73,6 +90,33 @@ public class Pawn extends Figure {
 
             if (end != null && end.getFigure() == null)
                 end = null;
+        }
+
+        @Override
+        public void execute(Cells cells) {
+            if (end.getFigure() instanceof EnPassant enPassant)
+                enPassant.finish();
+            super.execute(cells);
+        }
+    }
+
+    public class EnPassant extends Figure {
+        public EnPassant() {
+            super(Pawn.this.color);
+        }
+
+        @Override
+        protected void draw(CellDrawContext c) {
+            // nothing
+        }
+
+        @Override
+        public ArrayList<Move> getMoves(Cells cells) {
+            return new ArrayList<>();
+        }
+
+        private void finish() {
+            Pawn.this.cell.setFigure(null);
         }
     }
 }

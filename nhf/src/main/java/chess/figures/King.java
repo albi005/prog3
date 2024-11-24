@@ -62,6 +62,7 @@ public class King extends Figure {
                     if (end != null)
                         isAttackable.add(end);
                 }
+                continue;
             }
             for (Move move : figure.getMoves(cells)) {
                 if (move == null || move.getEnd() == null)

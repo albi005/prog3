@@ -22,8 +22,15 @@ public class InfoPanel extends JPanel {
         this.add(player2);
 
         this.button.addActionListener(e -> {
-            BoardState.Disabled state = (BoardState.Disabled) this.board.getState();
-            state.startGame(this.board);
+            BoardState state = this.board.getState();
+            if (state instanceof BoardState.Empty emptyState) {
+                emptyState.startGame(this.board);
+                return;
+            }
+
+            BoardState.Empty empty = new BoardState.Empty();
+            this.board.setState(empty);
+            empty.startGame(this.board);
         });
     }
 }

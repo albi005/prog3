@@ -11,8 +11,9 @@ public class Board extends JPanel {
         setLayout(new GridLayout(8, 8));
 
         cells.forEach(this::add);
+        cells.forEach(c -> c.setOnClick(cell -> state.handleCellSelected(this, cell)));
 
-        setState(new BoardState.Disabled());
+        setState(new BoardState.Empty());
     }
 
     public void setState(BoardState state) {
