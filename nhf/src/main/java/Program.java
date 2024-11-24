@@ -1,5 +1,6 @@
+import chess.AppFrame;
+
 import javax.swing.*;
-import java.awt.*;
 
 public class Program {
     public static void main(String[] args) throws UnsupportedLookAndFeelException, ClassNotFoundException, InstantiationException, IllegalAccessException {

@@ -1,3 +1,5 @@
+package chess;
+
 import java.awt.*;
 
 public class CellDrawContext {

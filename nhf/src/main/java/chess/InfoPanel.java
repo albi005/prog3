@@ -1,3 +1,5 @@
+package chess;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -20,7 +22,8 @@ public class InfoPanel extends JPanel {
         this.add(player2);
 
         this.button.addActionListener(e -> {
-            this.board.reset();
+            BoardState.Disabled state = (BoardState.Disabled) this.board.getState();
+            state.startGame(this.board);
         });
     }
 }
