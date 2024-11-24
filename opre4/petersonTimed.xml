@@ -9,67 +9,67 @@ clock lastRun0 = 0;
 clock lastRun1 = 0;</declaration>
 	<template>
 		<name>P2</name>
-		<location id="id0" x="246" y="8">
-			<name x="238" y="33">crit</name>
-			<label kind="testcodeEnter">lastRun1 = 0</label>
+		<location id="id0" x="180" y="47">
+			<name x="172" y="72">crit</name>
+			<label kind="testcodeExit">lastRun1 = 0</label>
 			<urgent/>
 		</location>
-		<location id="id1" x="-17" y="1">
-			<name x="-76" y="-8">other</name>
+		<location id="id1" x="-83" y="40">
+			<name x="-142" y="31">other</name>
 			<urgent/>
 		</location>
-		<location id="id2" x="128" y="-110">
+		<location id="id2" x="62" y="-71">
 			<urgent/>
 		</location>
-		<location id="id3" x="298" y="-110">
+		<location id="id3" x="232" y="-71">
 			<urgent/>
 		</location>
-		<location id="id4" x="451" y="-110">
+		<location id="id4" x="385" y="-71">
 			<urgent/>
 		</location>
-		<location id="id5" x="-17" y="-110">
+		<location id="id5" x="-83" y="-71">
 			<urgent/>
 		</location>
 		<init ref="id1"/>
 		<transition id="id6">
 			<source ref="id0"/>
 			<target ref="id1"/>
-			<label kind="assignment" x="-42" y="42">blocked1 = false</label>
+			<label kind="assignment" x="-22" y="50">blocked1 = false</label>
 		</transition>
 		<transition id="id7">
 			<source ref="id2"/>
 			<target ref="id0"/>
-			<label kind="guard" x="145" y="-76">!blocked0</label>
+			<label kind="guard" x="79" y="-37">!blocked0</label>
 		</transition>
 		<transition id="id8">
 			<source ref="id3"/>
 			<target ref="id0"/>
-			<label kind="guard" x="272" y="-67">turn == 1</label>
+			<label kind="guard" x="211" y="-20">turn == 1</label>
 		</transition>
 		<transition id="id9">
 			<source ref="id4"/>
 			<target ref="id2"/>
-			<nail x="306" y="-246"/>
+			<nail x="240" y="-207"/>
 		</transition>
 		<transition id="id10">
 			<source ref="id3"/>
 			<target ref="id4"/>
-			<label kind="guard" x="315" y="-127">turn != 1</label>
+			<label kind="guard" x="249" y="-88">turn != 1</label>
 		</transition>
 		<transition id="id11">
 			<source ref="id2"/>
 			<target ref="id3"/>
-			<label kind="guard" x="196" y="-127">blocked0</label>
+			<label kind="guard" x="130" y="-88">blocked0</label>
 		</transition>
 		<transition id="id12">
 			<source ref="id5"/>
 			<target ref="id2"/>
-			<label kind="assignment" x="1" y="-110">turn = 0</label>
+			<label kind="assignment" x="-52" y="-70">turn = 0</label>
 		</transition>
 		<transition id="id13">
 			<source ref="id1"/>
 			<target ref="id5"/>
-			<label kind="assignment" x="-177" y="-114">blocked1 = true</label>
+			<label kind="assignment" x="-216" y="-27">blocked1 = true</label>
 		</transition>
 	</template>
 	<template>
@@ -94,14 +94,14 @@ clock lastRun1 = 0;</declaration>
 		</location>
 		<location id="id19" x="263" y="-110">
 			<name x="255" y="-85">crit</name>
-			<label kind="testcodeEnter">lastRun0 = 0</label>
+			<label kind="testcodeExit">lastRun0 = 0</label>
 			<urgent/>
 		</location>
 		<init ref="id14"/>
 		<transition id="id20">
 			<source ref="id19"/>
 			<target ref="id14"/>
-			<label kind="assignment" x="68" y="-110">blocked0 = false</label>
+			<label kind="assignment" x="71" y="-108">blocked0 = false</label>
 		</transition>
 		<transition id="id21">
 			<source ref="id16"/>
@@ -111,7 +111,7 @@ clock lastRun1 = 0;</declaration>
 		<transition id="id22">
 			<source ref="id17"/>
 			<target ref="id19"/>
-			<label kind="guard" x="297" y="-178">turn == 0</label>
+			<label kind="guard" x="301" y="-173">turn == 0</label>
 		</transition>
 		<transition id="id23">
 			<source ref="id18"/>
@@ -131,12 +131,12 @@ clock lastRun1 = 0;</declaration>
 		<transition id="id26">
 			<source ref="id15"/>
 			<target ref="id16"/>
-			<label kind="assignment" x="26" y="-221">turn = 1</label>
+			<label kind="assignment" x="39" y="-218">turn = 1</label>
 		</transition>
 		<transition id="id27">
 			<source ref="id14"/>
 			<target ref="id15"/>
-			<label kind="assignment" x="-152" y="-225">blocked0 = true</label>
+			<label kind="assignment" x="-122" y="-175">blocked0 = true</label>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
@@ -158,10 +158,23 @@ system p1, p2;</system>
 			</result>
 		</query>
 		<query>
+			<formula>E&lt;&gt; p1.crit
+</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:16:14 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p2.crit</formula>
+			<comment/>
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:16:14 +0100">
+			</result>
+		</query>
+		<query>
 			<formula>A&lt;&gt; p1.crit</formula>
 			<comment/>
 			<option key="--diagnostic" value="1"/>
-			<result outcome="failure" type="quality" timestamp="2024-11-21 23:22:24 +0100">
+			<result outcome="failure" type="quality" timestamp="2024-11-22 12:14:46 +0100">
 				<option key="--diagnostic" value="1"/>
 			</result>
 		</query>
@@ -182,13 +195,13 @@ system p1, p2;</system>
 		<query>
 			<formula>A[] lastRun0 &lt; 100</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-21 23:22:26 +0100">
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:13:51 +0100">
 			</result>
 		</query>
 		<query>
 			<formula>A[] lastRun1 &lt; 100</formula>
 			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-21 23:22:26 +0100">
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:13:53 +0100">
 			</result>
 		</query>
 	</queries>

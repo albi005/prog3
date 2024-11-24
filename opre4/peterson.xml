@@ -129,6 +129,7 @@ p2 = P2();
 // List one or more processes to be composed into a system.
 system p1, p2;</system>
 	<queries>
+		<option key="--diagnostic" value="1"/>
 		<query>
 			<formula>A[] not deadlock</formula>
 			<comment/>
@@ -151,6 +152,19 @@ system p1, p2;</system>
 			<formula>E&lt;&gt; p2.crit</formula>
 			<comment/>
 			<result outcome="success" type="quality" timestamp="2024-11-20 10:15:19 +0100">
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p1.crit</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 12:08:17 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p2.crit</formula>
+			<comment/>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 12:08:05 +0100">
 			</result>
 		</query>
 		<query>

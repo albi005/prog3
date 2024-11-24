@@ -6,7 +6,7 @@ bool blocked0 = true;
 bool blocked1 = true;
 int turn = 0;</declaration>
 	<template>
-		<name>P2</name>
+		<name>P1</name>
 		<location id="id0" x="-229" y="-136">
 			<name x="-306" y="-170">other_things</name>
 		</location>
@@ -15,7 +15,7 @@ int turn = 0;</declaration>
 		<location id="id2" x="127" y="34">
 		</location>
 		<location id="id3" x="-280" y="51">
-			<name x="-390" y="68">critical_section</name>
+			<name x="-315" y="62">crit</name>
 		</location>
 		<location id="id4" x="221" y="-161">
 		</location>
@@ -60,7 +60,7 @@ int turn = 0;</declaration>
 		</transition>
 	</template>
 	<template>
-		<name x="5" y="5">P1</name>
+		<name x="5" y="5">P0</name>
 		<declaration>// Place local declarations here.
 </declaration>
 		<location id="id12" x="-331" y="-416">
@@ -71,7 +71,7 @@ int turn = 0;</declaration>
 		<location id="id14" x="25" y="-246">
 		</location>
 		<location id="id15" x="-382" y="-229">
-			<name x="-492" y="-212">critical_section</name>
+			<name x="-427" y="-220">crit</name>
 		</location>
 		<location id="id16" x="119" y="-441">
 		</location>
@@ -116,35 +116,52 @@ int turn = 0;</declaration>
 		</transition>
 	</template>
 	<system>// Place template instantiations here.
+p0 = P0();
 p1 = P1();
-p2 = P2();
 // List one or more processes to be composed into a system.
-system p1, p2;</system>
+system p0, p1;</system>
 	<queries>
+		<option key="--diagnostic" value="1"/>
 		<query>
 			<formula>A[] not deadlock</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:08:47 +0100">
-			</result>
-		</query>
-		<query>
-			<formula>A[] not (p1.critical_section and p2.critical_section)</formula>
-			<comment/>
-			<option key="--diagnostic" value="1"/>
-			<result outcome="failure" type="quality" timestamp="2024-11-20 11:08:49 +0100">
+			<comment>holtpontmentesség</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:06:44 +0100">
 				<option key="--diagnostic" value="1"/>
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt; p1.critical_section</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:08:49 +0100">
+			<formula>A[] not (p0.crit and p1.crit)</formula>
+			<comment>kölcsönös kizárást biztosítja a protokoll</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 12:06:51 +0100">
+				<option key="--diagnostic" value="1"/>
 			</result>
 		</query>
 		<query>
-			<formula>E&lt;&gt; p2.critical_section</formula>
-			<comment/>
-			<result outcome="success" type="quality" timestamp="2024-11-20 11:08:49 +0100">
+			<formula>E&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:06:45 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>E&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő beléphet a kritikus szakaszba</comment>
+			<result outcome="success" type="quality" timestamp="2024-11-22 12:06:45 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p0.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 12:06:46 +0100">
+				<option key="--diagnostic" value="1"/>
+			</result>
+		</query>
+		<query>
+			<formula>A&lt;&gt; p1.crit</formula>
+			<comment>a kezdőállapotból indulva minden résztvevő előbb vagy utóbb be fog lépni a kritikus szakaszba</comment>
+			<result outcome="failure" type="quality" timestamp="2024-11-22 12:06:46 +0100">
+				<option key="--diagnostic" value="1"/>
 			</result>
 		</query>
 	</queries>
