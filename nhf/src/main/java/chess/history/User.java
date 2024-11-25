@@ -2,7 +2,15 @@ package chess.history;
 
 import java.util.ArrayList;
 
-public record User(String name, ArrayList<Match> matches) {
+public final class User {
+    private final String name;
+    private final ArrayList<Match> matches;
+
+    public User(String name, ArrayList<Match> matches) {
+        this.name = name;
+        this.matches = matches;
+    }
+
     public User(String name) {
         this(name, new ArrayList<>());
     }
@@ -13,5 +21,13 @@ public record User(String name, ArrayList<Match> matches) {
                 "name='" + name + '\'' +
                 ", matches.size()=" + matches.size() +
                 '}';
+    }
+
+    public String name() {
+        return name;
+    }
+
+    public ArrayList<Match> matches() {
+        return matches;
     }
 }

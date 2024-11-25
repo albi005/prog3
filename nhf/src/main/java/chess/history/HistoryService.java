@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.TreeMap;
 
 public class HistoryService {
@@ -12,21 +13,23 @@ public class HistoryService {
 
     private final TreeMap<String, User> users = new TreeMap<>();
     private final ArrayList<Match> matches = new ArrayList<>();
+    private final String filename;
 
-    private HistoryService() {
+    protected HistoryService(String filename) {
+        this.filename = filename;
     }
 
     public static HistoryService getInstance() {
         if (instance == null) {
-            instance = new HistoryService();
+            instance = new HistoryService("history.json");
             instance.load();
         }
         return instance;
     }
 
-    private void load() {
+    protected void load() {
             try {
-                FileReader reader = new FileReader("history.json");
+                FileReader reader = new FileReader(filename);
                 var entries = gson.fromJson(reader, HistoryEntry[].class);
                 reader.close();
                 if (entries == null)
@@ -51,9 +54,14 @@ public class HistoryService {
         matches.add(match);
     }
 
+    public void clear() {
+        users.clear();
+        matches.clear();
+    }
+
     public void save() {
         try {
-            FileWriter writer = new FileWriter("history.json");
+            FileWriter writer = new FileWriter(filename);
             gson.toJson(matches.stream()
                     .map(m -> new HistoryEntry(
                             m.white().name(),
@@ -69,7 +77,7 @@ public class HistoryService {
         }
     }
 
-    public Iterable<User> getUsers() {
+    public Collection<User> getUsers() {
         return users.values();
     }
 

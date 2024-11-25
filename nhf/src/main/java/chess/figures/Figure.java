@@ -6,7 +6,6 @@ import chess.Cells;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Figure {
     protected final Color color;
@@ -72,6 +71,13 @@ public abstract class Figure {
 
         public void execute(Cells cells) {
             cells.move(Figure.this, end);
+        }
+
+        @Override
+        public String toString() {
+            if (end == null)
+                return "Move(null)";
+            return "Move(r" + end.getRow() + ", c" + end.getCol() + ")";
         }
     }
 
