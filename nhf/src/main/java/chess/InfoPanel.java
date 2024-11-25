@@ -1,22 +1,26 @@
 package chess;
 
+import chess.history.HistoryService;
+import chess.history.Match;
+
 import javax.swing.*;
 import java.awt.*;
+import java.util.function.Consumer;
 
 public class InfoPanel extends JPanel {
-    private JPanel player1;
-    private JPanel player2;
-    private JButton button;
-    private Board board;
+    private final PlayerPanel player1;
+    private final PlayerPanel player2;
+    private final JButton button;
+    private final Board board;
 
     public InfoPanel(Board board) {
+        super();
         this.board = board;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
-        this.player1 = new JPanel();
-        this.player1.setBackground(Color.RED);
-        this.player2 = new JPanel();
-        this.player2.setBackground(Color.BLUE);
-        this.button = new JButton("This is a button");
+        this.player1 = new PlayerPanel();
+        this.player2 = new PlayerPanel();
+        this.button = new JButton();
+        this.button.setVisible(false);
         this.add(player1);
         this.add(button);
         this.add(player2);
@@ -33,6 +37,21 @@ public class InfoPanel extends JPanel {
             empty.startGame(this.board);
         });
 
+        Consumer<PlayerPanel> onPlayerChanged = playerPanel -> {
+            BoardState.Empty empty;
+            if (board.getState() instanceof BoardState.Empty emptyState)
+                empty = emptyState;
+            else {
+                empty = new BoardState.Empty();
+                this.board.setState(empty);
+            }
+
+            if (player1.getPlayerName() != null && player2.getPlayerName() != null)
+                empty.startGame(this.board);
+        };
+        this.player1.setOnPlayerChanged(onPlayerChanged);
+        this.player2.setOnPlayerChanged(onPlayerChanged);
+
         board.setOnStateChanged(state -> {
             if (state instanceof BoardState.Empty empty) {
                 button.setVisible(false);
@@ -46,7 +65,20 @@ public class InfoPanel extends JPanel {
             if (state instanceof BoardState.Checked checked) {
             }
             if (state instanceof BoardState.Checkmated checkmated) {
+                HistoryService historyService = HistoryService.getInstance();
+                PlayerPanel winner;
+                PlayerPanel loser;
+                if (checkmated.getColor() == Color.WHITE) {
+                    winner = player2;
+                    loser = player1;
+                } else {
+                    winner = player1;
+                    loser = player2;
+                }
 
+                historyService.addMatch(winner.getPlayerName(), loser.getPlayerName(), winner.getPlayerName());
+                winner.update();
+                loser.update();
             }
         });
     }

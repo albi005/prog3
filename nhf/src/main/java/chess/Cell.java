@@ -94,7 +94,7 @@ public class Cell extends JComponent {
         }
 
         if (state.isDisabled()) {
-            g.setColor(new Color(255, 255, 255, 100));
+            g.setColor(new Color(255, 255, 255, 200));
             g.fillRect(0, 0, getWidth(), getHeight());
         }
     }
