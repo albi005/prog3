@@ -10,11 +10,19 @@ import java.awt.event.WindowEvent;
 public class AppFrame extends JFrame {
     public AppFrame() {
         super("Chess");
-        this.setLayout(new GridLayout(1, 2));
+
+//        this.setLayout(new GridLayout(1, 2));
         Board board = new Board();
-        this.add(board);
-        InfoPanel infoPanel = new InfoPanel(board);
-        this.add(infoPanel);
+        this.add(board, BorderLayout.CENTER);
+
+        JMenuBar menuBar = new JMenuBar();
+        JMenu menu = new JMenu("Játék");
+        menuBar.add(menu);
+        this.setJMenuBar(menuBar);
+
+        InfoPanel infoPanel = new InfoPanel(board, menu);
+        this.add(infoPanel, BorderLayout.EAST);
+
         this.pack();
         this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.addWindowListener(new WindowAdapter() {

@@ -10,31 +10,35 @@ import java.util.function.Consumer;
 public class InfoPanel extends JPanel {
     private final PlayerPanel player1;
     private final PlayerPanel player2;
-    private final JButton button;
     private final Board board;
+    private final JMenuItem restart = new JMenuItem("Új játék");
+    private final JMenuItem draw = new JMenuItem("Döntetlen");
 
-    public InfoPanel(Board board) {
+    public InfoPanel(Board board, JMenu menu) {
         super();
         this.board = board;
         this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         this.player1 = new PlayerPanel();
         this.player2 = new PlayerPanel();
-        this.button = new JButton();
-        this.button.setVisible(false);
         this.add(player1);
-        this.add(button);
         this.add(player2);
 
-        this.button.addActionListener(e -> {
-            BoardState state = this.board.getState();
-            if (state instanceof BoardState.Empty emptyState) {
-                emptyState.startGame(this.board);
-                return;
-            }
+        menu.add(restart);
+        menu.add(draw);
+        setMenuEnabled(false);
 
+        restart.addActionListener(e -> {
             BoardState.Empty empty = new BoardState.Empty();
             this.board.setState(empty);
             empty.startGame(this.board);
+        });
+        draw.addActionListener(e -> {
+            HistoryService historyService = HistoryService.getInstance();
+            historyService.addMatch(player1.getPlayerName(), player2.getPlayerName(), null);
+            player1.update();
+            player2.update();
+            BoardState.Empty empty = new BoardState.Empty();
+            this.board.setState(empty);
         });
 
         Consumer<PlayerPanel> onPlayerChanged = playerPanel -> {
@@ -54,11 +58,8 @@ public class InfoPanel extends JPanel {
 
         board.setOnStateChanged(state -> {
             if (state instanceof BoardState.Empty empty) {
-                button.setVisible(false);
             }
             if (state instanceof BoardState.Selecting selecting) {
-                button.setVisible(true);
-                button.setText("Új játék");
             }
             if (state instanceof BoardState.Moving moving) {
             }
@@ -80,6 +81,17 @@ public class InfoPanel extends JPanel {
                 winner.update();
                 loser.update();
             }
+
+            updateMenu();
         });
+    }
+
+    private void updateMenu() {
+        setMenuEnabled(!(board.getState() instanceof BoardState.Empty || board.getState() instanceof BoardState.Checkmated));
+    }
+
+    private void setMenuEnabled(boolean enabled) {
+        restart.setEnabled(enabled);
+        draw.setEnabled(enabled);
     }
 }

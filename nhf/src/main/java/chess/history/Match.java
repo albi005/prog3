@@ -6,7 +6,7 @@ public record Match(User white, User black, User winner) {
         return "Match{" +
                 "white=" + white.name() +
                 ", black=" + black.name() +
-                ", winner=" + winner.name() +
+                ", winner=" + (winner == null ? null : winner.name()) +
                 '}';
     }
 };

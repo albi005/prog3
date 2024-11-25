@@ -58,7 +58,7 @@ public class HistoryService {
                     .map(m -> new HistoryEntry(
                             m.white().name(),
                             m.black().name(),
-                            m.winner().name()
+                            m.winner() == null ? null : m.winner().name()
                     ))
                     .toList(),
                     writer
