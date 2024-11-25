@@ -1,7 +1,6 @@
 package chess;
 
 import chess.history.HistoryService;
-import chess.history.Match;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,6 +38,7 @@ public class InfoPanel extends JPanel {
             player2.update();
             BoardState.Empty empty = new BoardState.Empty();
             this.board.setState(empty);
+            empty.startGame(this.board);
         });
 
         Consumer<PlayerPanel> onPlayerChanged = playerPanel -> {
@@ -87,7 +87,14 @@ public class InfoPanel extends JPanel {
     }
 
     private void updateMenu() {
-        setMenuEnabled(!(board.getState() instanceof BoardState.Empty || board.getState() instanceof BoardState.Checkmated));
+        if (board.getState() instanceof BoardState.Empty empty)
+            setMenuEnabled(false);
+        else if (board.getState() instanceof BoardState.Checkmated checkmated) {
+            restart.setEnabled(true);
+            draw.setEnabled(false);
+        }
+        else
+            setMenuEnabled(true);
     }
 
     private void setMenuEnabled(boolean enabled) {

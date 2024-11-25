@@ -41,6 +41,18 @@ public class PlayerPanel extends JPanel {
 
         this.add(selector);
         JList<Match> list = new JList<>(matchList);
+        list.setCellRenderer(new DefaultListCellRenderer() {
+            @Override
+            public java.awt.Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Match match = (Match) value;
+                boolean draw = match.winner() == null;
+                boolean won = !draw && playerName.equals(match.winner().name());
+                String opponent = match.white().name().equals(playerName) ? match.black().name() : match.white().name();
+                String text = (draw ? "Döntetlen " : (won ? "Győzelem " : "Vereség "))
+                        + opponent + " ellen";
+                return super.getListCellRendererComponent(list, text, index, isSelected, cellHasFocus);
+            }
+        });
         this.add(new JScrollPane(list));
     }
 
