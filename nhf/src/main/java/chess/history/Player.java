@@ -2,16 +2,19 @@ package chess.history;
 
 import java.util.ArrayList;
 
-public final class User {
+/**
+ * Represents a player with a list of previous matches.
+ */
+public final class Player {
     private final String name;
     private final ArrayList<Match> matches;
 
-    public User(String name, ArrayList<Match> matches) {
+    public Player(String name, ArrayList<Match> matches) {
         this.name = name;
         this.matches = matches;
     }
 
-    public User(String name) {
+    public Player(String name) {
         this(name, new ArrayList<>());
     }
 

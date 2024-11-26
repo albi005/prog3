@@ -11,7 +11,6 @@ public class AppFrame extends JFrame {
     public AppFrame() {
         super("Chess");
 
-//        this.setLayout(new GridLayout(1, 2));
         Board board = new Board();
         this.add(board, BorderLayout.CENTER);
 

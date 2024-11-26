@@ -6,6 +6,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.stream.Stream;
 
+/**
+ * Container for 8x8 cells.
+ */
 public class Cells implements Iterable<Cell> {
     private final Cell[][] cells = new Cell[8][8];
 
@@ -27,6 +30,9 @@ public class Cells implements Iterable<Cell> {
         return get(cell.getRow() + dy, cell.getCol() + dx);
     }
 
+    /**
+     * Moves figure to cell, removing it from the original cell.
+     */
     public void move(Figure figure, Cell cell) {
         Cell start = figure.getCell();
         start.setFigure(null);

@@ -88,7 +88,7 @@ public abstract class BoardState {
         }
     }
 
-    // select another cell or move with the selected cell
+    /// Select another cell or move with the selected cell
     public static class Moving extends BoardState {
         protected final Cell selectedCell;
         protected final Figure selectedFigure;

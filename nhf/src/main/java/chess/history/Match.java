@@ -1,11 +1,14 @@
 package chess.history;
 
+/**
+ * Represents a match between two players.
+ */
 public final class Match {
-    private final User white;
-    private final User black;
-    private final User winner;
+    private final Player white;
+    private final Player black;
+    private final Player winner;
 
-    public Match(User white, User black, User winner) {
+    public Match(Player white, Player black, Player winner) {
         this.white = white;
         this.black = black;
         this.winner = winner;
@@ -20,15 +23,15 @@ public final class Match {
                 '}';
     }
 
-    public User white() {
+    public Player white() {
         return white;
     }
 
-    public User black() {
+    public Player black() {
         return black;
     }
 
-    public User winner() {
+    public Player winner() {
         return winner;
     }
 };

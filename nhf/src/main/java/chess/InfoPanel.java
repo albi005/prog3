@@ -6,6 +6,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
+/**
+ * Shows player selectors and game history.
+ */
 public class InfoPanel extends JPanel {
     private final PlayerPanel player1;
     private final PlayerPanel player2;
@@ -57,14 +60,6 @@ public class InfoPanel extends JPanel {
         this.player2.setOnPlayerChanged(onPlayerChanged);
 
         board.setOnStateChanged(state -> {
-            if (state instanceof BoardState.Empty empty) {
-            }
-            if (state instanceof BoardState.Selecting selecting) {
-            }
-            if (state instanceof BoardState.Moving moving) {
-            }
-            if (state instanceof BoardState.Checked checked) {
-            }
             if (state instanceof BoardState.Checkmated checkmated) {
                 HistoryService historyService = HistoryService.getInstance();
                 PlayerPanel winner;
@@ -87,9 +82,9 @@ public class InfoPanel extends JPanel {
     }
 
     private void updateMenu() {
-        if (board.getState() instanceof BoardState.Empty empty)
+        if (board.getState() instanceof BoardState.Empty)
             setMenuEnabled(false);
-        else if (board.getState() instanceof BoardState.Checkmated checkmated) {
+        else if (board.getState() instanceof BoardState.Checkmated) {
             restart.setEnabled(true);
             draw.setEnabled(false);
         }

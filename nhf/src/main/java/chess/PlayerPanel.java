@@ -2,19 +2,22 @@ package chess;
 
 import chess.history.HistoryService;
 import chess.history.Match;
-import chess.history.User;
+import chess.history.Player;
 
 import javax.swing.*;
 import java.util.Objects;
 import java.util.function.Consumer;
 
+/**
+ * Allows selecting a single player and shows their game history.
+ */
 public class PlayerPanel extends JPanel {
 
     private final JComboBox<String> selector = new JComboBox<>();
     private final DefaultListModel<Match> matchList = new DefaultListModel<>();
 
     private String playerName;
-    private User user;
+    private Player player;
     private Consumer<PlayerPanel> onPlayerChanged;
     private boolean isRefreshing;
 
@@ -24,7 +27,7 @@ public class PlayerPanel extends JPanel {
 
         selector.setEditable(true);
         selector.addItem(null);
-        historyService.getUsers().forEach((user) -> selector.addItem(user.name()));
+        historyService.getUsers().forEach((player) -> selector.addItem(player.name()));
         selector.addActionListener((e) -> {
             if (isRefreshing)
                 return;
@@ -60,6 +63,9 @@ public class PlayerPanel extends JPanel {
         refreshLists();
     }
 
+    /**
+     * Gets the name of the selected player.
+     */
     public String getPlayerName() {
         return playerName;
     }
@@ -72,14 +78,14 @@ public class PlayerPanel extends JPanel {
         isRefreshing = true;
         HistoryService historyService = HistoryService.getInstance();
         matchList.clear();
-        user = historyService.getUser(playerName);
-        if (user != null) {
-            user.matches().forEach(matchList::addElement);
+        player = historyService.getUser(playerName);
+        if (player != null) {
+            player.matches().forEach(matchList::addElement);
         }
 
         selector.removeAllItems();
         selector.addItem(null);
-        historyService.getUsers().forEach((user) -> selector.addItem(user.name()));
+        historyService.getUsers().forEach((player) -> selector.addItem(player.name()));
         selector.setSelectedItem(playerName);
         isRefreshing = false;
     }

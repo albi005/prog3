@@ -4,6 +4,9 @@ import javax.swing.*;
 import java.awt.*;
 import java.util.function.Consumer;
 
+/**
+ * Represents a chess board.
+ */
 public class Board extends JPanel {
     private final Cells cells = new Cells();
     private BoardState state;
